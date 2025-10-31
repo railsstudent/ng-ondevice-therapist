@@ -19,7 +19,7 @@ import { Sender } from '../types/sender.type';
   templateUrl: './therapist-messages.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationMessagesComponent {
+export class TherapistMessagesComponent {
   messages = input.required<ChatMessage[]>();
   isLoading = input.required<boolean>();
 

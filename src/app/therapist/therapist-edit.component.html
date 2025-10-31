@@ -2,27 +2,34 @@
   @let details = feature();
   <app-card-header [name]="details?.name || ''" [description]="details?.description || ''"  />
 
-  <div class="w-full max-w-2xl mx-auto mb-4 flex justify-end">
-    <button
-        type="button"
-        [disabled]="isConversationDisabled()"
-        (click)="toggleConversation()"
-        class="px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition duration-200">
-        <span>{{ btnConversationText() }}</span>
-    </button>
-  </div>
+  @if (!canUseChromeBuiltInAI()) {
+    <div class="w-full max-w-2xl mx-auto mb-4 flex">
+      <p>Chrome Built-in AI is unsupported in this browser.</p>
+    </div>
+  } @else {
 
-  <div class="w-full max-w-2xl mx-auto mb-8 h-[70vh] flex flex-col bg-gray-800 border border-gray-700 rounded-xl shadow-2xl">
-    <app-conversation-messages
-      class="flex-grow p-6 space-y-6 overflow-y-auto"
-      [messages]="messages()"
-      [isLoading]="isLoading()"
-      (downloadImage)="handleDownloadImage($event)"
-    />
-    <app-conversation-input-form
-      [pauseSendPrompt]="!isEditing() || isLoading()"
-      [isGeneratingImage]="isLoading()"
-      (newEditRequest)="handleSendPrompt($event)"
-    />
-  </div>
+    <div class="w-full max-w-2xl mx-auto mb-4 flex justify-end">
+      <button
+          type="button"
+          [disabled]="isTherapyDisabled()"
+          (click)="toggleConversation()"
+          class="px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition duration-200">
+          <span>{{ btnTherapyText() }}</span>
+      </button>
+    </div>
+
+    <div class="w-full max-w-2xl mx-auto mb-8 h-[70vh] flex flex-col bg-gray-800 border border-gray-700 rounded-xl shadow-2xl">
+      <app-conversation-messages
+        class="flex-grow p-6 space-y-6 overflow-y-auto"
+        [messages]="messages()"
+        [isLoading]="isLoading()"
+        (downloadImage)="handleDownloadImage($event)"
+      />
+      <app-conversation-input-form
+        [pauseSendPrompt]="!isEditing() || isLoading()"
+        [isGeneratingImage]="isLoading()"
+        (newEditRequest)="handleSendPrompt($event)"
+      />
+    </div>
+  }
 </app-card>

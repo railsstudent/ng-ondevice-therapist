@@ -17,7 +17,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/app/*"]
-    }
+    },
+    "composite": true,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -26,7 +27,9 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": [],
+  "files": [
+    "./node_modules/@types/dom-chromium-ai/index.d.ts"
+  ],
   "references": [
     {
       "path": "./tsconfig.app.json"

@@ -7,7 +7,7 @@ import { Base64InlineData } from '../types/base64-inline-data.type';
 @Injectable({
   providedIn: 'root'
 })
-export class ConversationEditService {
+export class TherapyService {
   chat = signal<ChatSession | undefined>(undefined);
 
   firebaseService = inject(FirebaseService);
@@ -72,5 +72,37 @@ export class ConversationEditService {
 
   endEdit(): void {
     this.chat.set(undefined);
+  }
+
+  async testChromeBuiltInAI() {
+    const promptAvailability = await LanguageModel.availability({
+      expectedInputs: [
+        {
+          type: 'text',
+          languages: ['en']
+        },
+        {
+          type: 'image'
+        },
+        {
+          type: 'audio'
+        }
+      ],
+      expectedOutputs: [
+        {
+          type: 'text',
+          languages: ['en']
+        }
+      ]
+    });
+
+    const proofreadAvailability = await Proofreader.availability({
+      includeCorrectionTypes: true,
+      includeCorrectionExplanations: true,
+      correctionExplanationLanguage: 'en',
+      expectedInputLanguages: ['en'],
+    })
+
+    return promptAvailability !== 'unavailable' && proofreadAvailability !== 'unavailable';
   }
 }

@@ -36,7 +36,7 @@ import { FormsModule } from '@angular/forms';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConversationInputFormComponent {
+export class TherapistInputFormComponent {
   pauseSendPrompt = input(false);
   isGeneratingImage = input(false);
   prompt = signal('');
