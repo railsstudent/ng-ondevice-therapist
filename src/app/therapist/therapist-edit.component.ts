@@ -1,11 +1,8 @@
 import { CardHeaderComponent } from '@/shared/card/card-header/card-header.component';
 import { CardComponent } from '@/shared/card/card.component';
-import { GenMediaService } from '@/shared/gen-media/services/gen-media.service';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { GenerativeContentBlob } from 'firebase/ai';
 import { from } from 'rxjs';
-import { DEFAULT_BASE64_INLINE_DATA } from './constants/base64-inline-data.const';
 import { makeAIResponsePair, makeErrorMessage, makeSuccessMessage } from './helpers/message.helper';
 import { TherapyService } from './services/therapy.service';
 import { TherapistInputFormComponent } from './therapist-input-form/therapist-input-form.component';
@@ -25,7 +22,6 @@ import { ChatMessage } from './types/chat-message.type';
 })
 export default class TherapistComponent {
   private readonly therapyService = inject(TherapyService);
-  private readonly genMediaService = inject(GenMediaService);
 
   feature = computed(() => ({
       "name": "On-device Therapist",
@@ -47,24 +43,21 @@ export default class TherapistComponent {
   isLoading = signal(false);
 
   messages = signal<ChatMessage[]>([]);
-  lastEditedImage = signal<GenerativeContentBlob>(DEFAULT_BASE64_INLINE_DATA.inlineData);
 
   async handleSendPrompt(prompt: string): Promise<void> {
     this.isLoading.set(true);
 
-    const { aiMessageId, pair } = makeAIResponsePair(prompt, this.messages()[this.messages().length - 1].id);
+    const lastMessageId = this.messages().length ? this.messages()[this.messages().length - 1].id : 0;
+    const { aiMessageId, pair } = makeAIResponsePair(prompt, lastMessageId);
     this.messages.update(messages => ([...messages, ...pair]));
 
     try {
-      const { inlineData, base64, text }
-        = await this.therapyService.editImage(prompt, this.lastEditedImage());
+      const answer = await this.therapyService.promptText(prompt);
       this.messages.update(messages => {
         return messages.map(message => message.id !== aiMessageId  ?
-          message : makeSuccessMessage(message, base64, text)
+          message : makeSuccessMessage(message, answer)
         );
       });
-
-      this.lastEditedImage.set(inlineData);
     } catch (e) {
       const errorMessage =  e instanceof Error ? e.message: 'An unexpected error occurred in converational image editing.';
       this.messages.update(messages => {
@@ -76,20 +69,17 @@ export default class TherapistComponent {
     }
   }
 
-   toggleConversation() {
+   async toggleConversation() {
       const currentEditing = this.isEditing();
       // not editing to editing
       if (!currentEditing) {
-        this.therapyService.startEdit();
+        // this.therapyService.startEdit();
+        await this.therapyService.createSession();
       } else {
         // editing to not editing
-        this.therapyService.endEdit();
+        // this.therapyService.endEdit();
         this.messages.set([]);
       }
       this.isEditing.update((prev) => !prev);
-  }
-
-  handleDownloadImage(event: { base64: string, filename: string }) {
-    this.genMediaService.downloadImage(event.filename, event.base64);
   }
 }

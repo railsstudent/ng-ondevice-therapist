@@ -4,7 +4,7 @@
 
   @if (!canUseChromeBuiltInAI()) {
     <div class="w-full max-w-2xl mx-auto mb-4 flex">
-      <p>Chrome Built-in AI is unsupported in this browser.</p>
+      <p class="mx-auto">Chrome Built-in AI is unsupported in this browser.</p>
     </div>
   } @else {
 
@@ -23,7 +23,6 @@
         class="flex-grow p-6 space-y-6 overflow-y-auto"
         [messages]="messages()"
         [isLoading]="isLoading()"
-        (downloadImage)="handleDownloadImage($event)"
       />
       <app-conversation-input-form
         [pauseSendPrompt]="!isEditing() || isLoading()"

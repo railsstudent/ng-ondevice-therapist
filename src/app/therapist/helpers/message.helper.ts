@@ -6,17 +6,15 @@ export function makeErrorMessage(oldMessage: ChatMessage, errorMessage: string):
     isLoading: false,
     isError: true,
     text: errorMessage,
-    base64: undefined,
   }
 }
 
-export function makeSuccessMessage(oldMessage: ChatMessage, base64: string, text: string | undefined): ChatMessage {
+export function makeSuccessMessage(oldMessage: ChatMessage, text: string | undefined): ChatMessage {
   return {
     ...oldMessage,
     isLoading: false,
     isError: false,
     text: text || 'New image generated based on your edit request.',
-    base64,
   }
 }
 

@@ -13,7 +13,7 @@
           @if (message.isLoading) {
             <div class="flex items-center space-x-2">
               <app-spinner-icon />
-              <span>Editing the last image...</span>
+              <span>AI is thinking...</span>
             </div>
           } @else {
             @if (message.text) {
@@ -23,15 +23,6 @@
                 }
                 {{ message.text }}
               </p>
-            }
-            @if (message.base64) {
-              <app-image-viewer
-                [id]="message.id"
-                [url]="message.base64"
-                (imageAction)="handleImageAction($event)"
-                [capabilities]="{ download: true, video: false, clearImage: false }"
-                [imageSize]="{ width: 300, height: 200 }"
-              />
             }
           }
         </div>
