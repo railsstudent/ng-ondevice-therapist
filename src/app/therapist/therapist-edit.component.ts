@@ -2,6 +2,7 @@ import { CardHeaderComponent } from '@/shared/card/card-header/card-header.compo
 import { CardComponent } from '@/shared/card/card.component';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { marked } from 'marked';
 import { from } from 'rxjs';
 import { makeAIResponsePair, makeErrorMessage, makeSuccessMessage } from './helpers/message.helper';
 import { TherapyService } from './services/therapy.service';
@@ -53,9 +54,10 @@ export default class TherapistComponent {
 
     try {
       const answer = await this.therapyService.promptText(prompt);
+      const htmlText = await marked.parse(answer);
       this.messages.update(messages => {
         return messages.map(message => message.id !== aiMessageId  ?
-          message : makeSuccessMessage(message, answer)
+          message : makeSuccessMessage(message, htmlText)
         );
       });
     } catch (e) {

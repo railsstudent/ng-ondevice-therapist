@@ -21,7 +21,7 @@
                 @if (message.isError) {
                   <app-chat-error-icon class="mr-2" />
                 }
-                {{ message.text }}
+                <span [innerHTML]="message.text"></span>
               </p>
             }
           }
