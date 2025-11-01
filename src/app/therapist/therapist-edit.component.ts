@@ -1,5 +1,6 @@
 import { CardHeaderComponent } from '@/shared/card/card-header/card-header.component';
 import { CardComponent } from '@/shared/card/card.component';
+import { LoaderComponent } from '@/shared/loader/loader.component';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { marked } from 'marked';
@@ -17,6 +18,7 @@ import { ChatMessage } from './types/chat-message.type';
     CardHeaderComponent,
     TherapistMessagesComponent,
     TherapistInputFormComponent,
+    LoaderComponent
   ],
   templateUrl: './therapist-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,6 +47,7 @@ export default class TherapistComponent {
     .map((message) => message.text));
 
   therapistSummary = signal('');
+  isSummarizing = signal(false);
 
   async handleSendPrompt(rawPrompt: string): Promise<void> {
     this.isLoading.set(true);
@@ -79,6 +82,7 @@ export default class TherapistComponent {
       const currentEditing = this.isEditing();
       // not editing to editing
       if (!currentEditing) {
+        this.therapistSummary.set('');
         await this.therapyService.createSession();
         this.messages.set([
           {
@@ -89,10 +93,11 @@ export default class TherapistComponent {
             isError: undefined,
           }
         ]);
-        this.therapistSummary.set('');
       } else {
+        this.isSummarizing.set(true);
         const summary = await this.therapyService.generateSummaries(this.aiMessages());
         this.therapistSummary.set(summary);
+        this.isSummarizing.set(false);
         await this.therapyService.destroySession();
         this.messages.set([]);
       }

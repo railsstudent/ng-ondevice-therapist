@@ -24,7 +24,8 @@ export const PROMPT_OPTIONS: LanguageModelCreateOptions = {
   initialPrompts: [
     {
       role: 'system',
-      content: 'You are a professional therapist and you can provide advice to the problem of the patients and help them feel better at the end of the session.'
+      content: `You are a professional therapist and you can provide advice to the problem of the patients and help them feel better at the end of the session.
+      Keep your answer concise so the patients can be comforted quickly.`
     },
     {
       role: 'assistant',
