@@ -24,7 +24,11 @@ export const PROMPT_OPTIONS: LanguageModelCreateOptions = {
   initialPrompts: [
     {
       role: 'system',
-      content: 'You are a professional therapist and you can provide advice according to the mood of the people and help them feel better.'
+      content: 'You are a professional therapist and you can provide advice to the problem of the patients and help them feel better at the end of the session.'
+    },
+    {
+      role: 'assistant',
+      content: 'Do you have any problem to discuss today?'
     }
   ]
 }
@@ -34,4 +38,18 @@ export const PROOFREADER_OPTIONS: ProofreaderCreateCoreOptions = {
   includeCorrectionExplanations: true,
   correctionExplanationLanguage: 'en',
   expectedInputLanguages: ['en'],
+}
+
+export const SUMMARIZER_CREATE_OPTIONS: SummarizerCreateCoreOptions = {
+  type: 'tldr',
+  format: 'plain-text',
+  length: 'short',
+  expectedInputLanguages: ['en'],
+  expectedContextLanguages: ['en'],
+  outputLanguage: 'en',
+}
+
+export const SUMMARIZER_OPTIONS: SummarizerCreateOptions = {
+  ...SUMMARIZER_CREATE_OPTIONS,
+  sharedContext: 'Summarize the conversation of a therapy session.',
 }

@@ -24,11 +24,6 @@ import { ChatMessage } from './types/chat-message.type';
 export default class TherapistComponent {
   private readonly therapyService = inject(TherapyService);
 
-  feature = computed(() => ({
-      "name": "On-device Therapist",
-      "description": "An AI-powered, privacy-focused mental health assistant that provides real-time emotional support and therapeutic guidance"
-  }));
-
   canUseChromeBuiltInAI = toSignal(
     from(this.therapyService.testChromeBuiltInAI()),
     { initialValue: false }
@@ -45,6 +40,11 @@ export default class TherapistComponent {
 
   messages = signal<ChatMessage[]>([]);
   prompt = signal('');
+  aiMessages = computed(() => this.messages()
+    .filter((message) => message.sender === 'AI')
+    .map((message) => message.text));
+
+  therapistSummary = signal('');
 
   async handleSendPrompt(rawPrompt: string): Promise<void> {
     this.isLoading.set(true);
@@ -75,14 +75,26 @@ export default class TherapistComponent {
     }
   }
 
-   async toggleConversation() {
+  async toggleConversation() {
       const currentEditing = this.isEditing();
       // not editing to editing
       if (!currentEditing) {
         await this.therapyService.createSession();
+        this.messages.set([
+          {
+            id: 1,
+            sender: 'AI',
+            text: 'Do you have any problem to discuss today?',
+            isLoading: false,
+            isError: undefined,
+          }
+        ]);
+        this.therapistSummary.set('');
       } else {
-        this.messages.set([]);
+        const summary = await this.therapyService.generateSummaries(this.aiMessages());
+        this.therapistSummary.set(summary);
         await this.therapyService.destroySession();
+        this.messages.set([]);
       }
       this.isEditing.update((prev) => !prev);
   }

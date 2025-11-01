@@ -1,12 +1,21 @@
 <app-card>
-  @let details = feature();
-  <app-card-header [name]="details?.name || ''" [description]="details?.description || ''"  />
+  <app-card-header
+    [name]="'On-device Therapist'"
+    [description]="'An AI-powered, privacy-focused mental health assistant that provides real-time emotional support and therapeutic guidance'"
+  />
 
   @if (!canUseChromeBuiltInAI()) {
     <div class="w-full max-w-2xl mx-auto mb-4 flex">
       <p class="mx-auto">Chrome Built-in AI is unsupported in this browser.</p>
     </div>
   } @else {
+
+    @if (therapistSummary()) {
+      <div class="w-full max-w-2xl mx-auto mb-8 flex flex-col bg-gray-800 border border-gray-700 rounded-xl shadow-2xl">
+        <p class="mx-auto">Therapist Summary</p>
+        <p class="text-left">{{ therapistSummary() }}</p>
+      </div>
+    }
 
     <div class="w-full max-w-2xl mx-auto mb-4 flex justify-end">
       <button
