@@ -1,4 +1,3 @@
-import { Base64InlineData } from './base64-inline-data.type';
 import { Sender } from './sender.type';
 
 export type ChatMessage = {
@@ -8,8 +7,3 @@ export type ChatMessage = {
   isLoading?: boolean;
   isError?: boolean;
 };
-
-export type PreviousMessagesState = {
-  source: NoInfer<Base64InlineData>
-  value: NoInfer<ChatMessage | undefined>;
-} | undefined;
