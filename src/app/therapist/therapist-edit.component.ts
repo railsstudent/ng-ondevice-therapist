@@ -44,9 +44,12 @@ export default class TherapistComponent {
   isLoading = signal(false);
 
   messages = signal<ChatMessage[]>([]);
+  prompt = signal('');
 
-  async handleSendPrompt(prompt: string): Promise<void> {
+  async handleSendPrompt(rawPrompt: string): Promise<void> {
     this.isLoading.set(true);
+
+    const prompt = await this.therapyService.proofreadPrompt(rawPrompt);
 
     const lastMessageId = this.messages().length ? this.messages()[this.messages().length - 1].id : 0;
     const { aiMessageId, pair } = makeAIResponsePair(prompt, lastMessageId);
@@ -67,6 +70,7 @@ export default class TherapistComponent {
           makeErrorMessage(message, errorMessage));
       });
     } finally {
+      this.prompt.set('');
       this.isLoading.set(false);
     }
   }

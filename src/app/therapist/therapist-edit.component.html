@@ -25,6 +25,7 @@
         [isLoading]="isLoading()"
       />
       <app-conversation-input-form
+        [(prompt)]="prompt"
         [pauseSendPrompt]="!isEditing() || isLoading()"
         [isGeneratingImage]="isLoading()"
         (newEditRequest)="handleSendPrompt($event)"

@@ -1,6 +1,6 @@
 import { SendIconComponent } from '@/shared/icons/send-icon.component';
 import { SpinnerIconComponent } from '@/shared/icons/spinner-icon.component';
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -39,7 +39,7 @@ import { FormsModule } from '@angular/forms';
 export class TherapistInputFormComponent {
   pauseSendPrompt = input(false);
   isGeneratingImage = input(false);
-  prompt = signal('');
+  prompt = model('');
 
   newEditRequest = output<string>();
 

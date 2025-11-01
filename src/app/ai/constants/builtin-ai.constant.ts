@@ -1,4 +1,4 @@
-export const PROMPT_OPTIONS: LanguageModelCreateCoreOptions = {
+export const PROMPT_CREATE_OPTIONS: LanguageModelCreateCoreOptions = {
   expectedInputs: [
     {
       type: 'text',
@@ -15,6 +15,16 @@ export const PROMPT_OPTIONS: LanguageModelCreateCoreOptions = {
     {
       type: 'text',
       languages: ['en']
+    }
+  ]
+}
+
+export const PROMPT_OPTIONS: LanguageModelCreateOptions = {
+  ...PROMPT_CREATE_OPTIONS,
+  initialPrompts: [
+    {
+      role: 'system',
+      content: 'You are a professional therapist and you can provide advice according to the mood of the people and help them feel better.'
     }
   ]
 }
