@@ -75,12 +75,10 @@ export default class TherapistComponent {
       const currentEditing = this.isEditing();
       // not editing to editing
       if (!currentEditing) {
-        // this.therapyService.startEdit();
         await this.therapyService.createSession();
       } else {
-        // editing to not editing
-        // this.therapyService.endEdit();
         this.messages.set([]);
+        await this.therapyService.destroySession();
       }
       this.isEditing.update((prev) => !prev);
   }
